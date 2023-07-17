@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import crypto from 'crypto';
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -22,13 +21,7 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
-        set: (v:string) => encodePassword(v)
-    },
-    salt: {
-        type: Buffer,
-        required: true,
-        immutable: true
+        required: true
     },
     createdOn: {
         type: Date,
@@ -39,19 +32,34 @@ const userSchema = new mongoose.Schema({
         type: Date,
         immutable: true,
         default: () => Date.now()
+    },
+    token: {
+        type: String
     }
 });
 
-function encodePassword(password:string) {
-    return crypto.createHash('sha256').update(password).digest('hex');
+async function validateUsername(username:string):Promise<boolean> {
+    try {
+        var data = await mongoose.model("users", userSchema).findOne({username: username});
+        if(data === null) return true;
+        else return false;
+    }   
+    catch(err) {
+        console.log(err);
+        return false;
+    }
 }
 
-function validateUsername(username:string):boolean {
-    return (mongoose.model("users", userSchema).findOne({username: username}) === null ? false : true);
-}
-
-function validateEmail(email:string):boolean {
-    return (mongoose.model("users", userSchema).findOne({email: email}) === null ? false : true);
+async function validateEmail(email:string):Promise<boolean> {
+    try {
+        var data = await mongoose.model("users", userSchema).findOne({email: email});
+        if(data === null) return true;
+        else return false;
+    }   
+    catch(err) {
+        console.log(err);
+        return false;
+    }
 }
 
 export = mongoose.model("users", userSchema)
