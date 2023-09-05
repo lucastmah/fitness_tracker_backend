@@ -10,11 +10,13 @@ import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
-const db_user_name:string = encodeURIComponent(process.env.USER_NAME as string);
-const db_password:string = encodeURIComponent(process.env.PASSWORD as string);
+//const db_user_name:string = encodeURIComponent(process.env.USER_NAME as string);
+//const db_password:string = encodeURIComponent(process.env.PASSWORD as string);
 const hmac_sha256_key:string = encodeURIComponent(process.env.HMAC_SHA256_KEY as string);
 const database:string = encodeURIComponent("sample_analytics");
 
+const db_user_name:string = "lucastmah"
+const db_password:string = "S0hd54VLuQRY8mPi"
 const jwtExpirySeconds = 300;
 
 const uri = `mongodb+srv://${db_user_name}:${db_password}@fitnesscluster.xhw0osd.mongodb.net/${database}?tls=true`;
